@@ -5,7 +5,6 @@ export type UserProps = {
     email: string;
     password: string;
     role: 'common' | 'admin';
-    isActive: boolean;
     createdAt: Date;
     lastLogin: Date | null;
     isBlocked: boolean
@@ -24,7 +23,6 @@ export class User {
         email,
         password,
         role,
-        isActive: true,
         createdAt,
         lastLogin: null,
         isBlocked
@@ -39,4 +37,12 @@ export class User {
     public getProps(): UserProps {
         return this.props;
     }
+
+    public get id() { return this.props.id; }
+    public get email() { return this.props.email; }
+    public get password() { return this.props.password; }
+    public get role() { return this.props.role; }
+    public get isBlocked() { return this.props.isBlocked; }
+    public get lastLogin() { return this.props.lastLogin; }
+
 }
