@@ -1,8 +1,8 @@
-import { RegisterUserInputDTO } from "../../dto/auth/registerUser/RegisterUserInputDTO";
-import { RegisterUserOutputDTO } from "../../dto/auth/registerUser/RegisterUserOutputDTO";
-import { UseCase } from "../UseCase";
-import { UserRepository } from "../../../domain/repositories/UserRepository";
-import { User } from "../../../domain/entities/User";
+import { RegisterUserInputDTO } from "../../../dto/auth/registerUser/RegisterUserInputDTO";
+import { RegisterUserOutputDTO } from "../../../dto/auth/registerUser/RegisterUserOutputDTO";
+import { UseCase } from "../../UseCase";
+import { UserRepository } from "../../../../domain/repositories/UserRepository";
+import { User } from "../../../../domain/entities/User";
 import { hash } from "bcrypt";
 
 export class RegisterUser implements UseCase<RegisterUserInputDTO, RegisterUserOutputDTO> {
@@ -12,8 +12,8 @@ export class RegisterUser implements UseCase<RegisterUserInputDTO, RegisterUserO
         
         const saltRounds = Number(process.env.SALT_ROUNDS);
         const senhaCriptografada = await hash(input.password, saltRounds);
-
-        const user = User.build(input.email, senhaCriptografada, input.role);
+        const role = "common"
+        const user = User.build(input.email, senhaCriptografada, role);
         await this.userRepo.save(user);
 
         return {

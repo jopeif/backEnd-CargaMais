@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import { Login } from "../../../../application/usecase/auth/Login";
 import { RefreshToken } from "../../../../application/usecase/auth/RefreshToken";
-import { RegisterUser } from "../../../../application/usecase/auth/RegisterUser";
+import { RegisterUser } from "../../../../application/usecase/auth/register/RegisterUser";
+import { RegisterAdmin } from "../../../../application/usecase/auth/register/RegisterAdmin";
 
 export class AuthController {
     constructor(
     private loginUseCase: Login,
     private refreshAccessToken: RefreshToken,
-    private registerUser: RegisterUser
+    private registerUser: RegisterUser,
+    private registerAdmin: RegisterAdmin,
 ) {}
 
 
@@ -34,12 +36,33 @@ export class AuthController {
 
     async registrarUsuario(req: Request, res: Response) {
     try {
-        const { email, password, role } = req.body;
-        const result = await this.registerUser.execute({ email, password, role });
+        const { email, password } = req.body;
+        const result = await this.registerUser.execute({ email, password });
         res.status(201).json(result);
     } catch (err) {
         res.status(400).json({ error: `Unable to create user: ${err}` });
     }
 }
+    async registrarAdmin(req: Request, res: Response) {
+    try {
+        const { email, password } = req.body;
+        const result = await this.registerAdmin.execute({ email, password });
+        res.status(201).json(result);
+    } catch (err) {
+        res.status(400).json({ error: `Unable to create user: ${err}` });
+    }
+}
+
+    
+async getProfile(req: Request, res: Response) {
+        // @ts-ignore
+        const user = req.user;
+
+        res.json({
+            id: user.id,
+            email: user.email,
+            role: user.role,
+        });
+    }
 
 }
