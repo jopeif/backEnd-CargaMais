@@ -30,7 +30,10 @@ export class User {
     }
 
     public static assemble(props: UserProps): User {
-        return new User(props);
+        try{
+            return new User(props);}catch(err){
+                throw err
+            }
     }
 
   // Optional: expose a getter if needed

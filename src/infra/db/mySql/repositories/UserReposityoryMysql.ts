@@ -1,6 +1,6 @@
-import { connection } from "./Mysqlconnection";
-import { User } from "../../../domain/entities/User";
-import { UserRepository } from "../../../domain/repositories/UserRepository";
+import { connection } from "../Mysqlconnection";
+import { User } from "../../../../domain/entities/User";
+import { UserRepository } from "../../../../domain/repositories/UserRepository";
 import { RowDataPacket } from "mysql2";
 
 export class UserRepositoryMysql implements UserRepository {
@@ -24,22 +24,26 @@ export class UserRepositoryMysql implements UserRepository {
     }
 
     async findByEmail(email: string): Promise<User | null> {
-        const [[result]] = await connection.query<RowDataPacket[]>(
-            "SELECT * FROM users WHERE email = ?",
-            [email]
-        );
+        try{
+            const [[result]] = await connection.query<RowDataPacket[]>(
+                "SELECT * FROM users WHERE email = ?",
+                [email]
+            );
 
-        if (!result) return null;
+            if (!result) return null;
 
-        return User.assemble({
-            id: result.id,
-            email: result.email,
-            password: result.password,
-            role: result.role,
-            createdAt: result.created_at,
-            lastLogin: result.last_login,
-            isBlocked: result.is_blocked
-        });
+            return User.assemble({
+                id: result.id,
+                email: result.email,
+                password: result.password,
+                role: result.role,
+                createdAt: result.created_at,
+                lastLogin: result.last_login,
+                isBlocked: result.is_blocked
+            });
+        }catch(err){
+            throw err
+        }
     }
 
     async findById(id: string): Promise<User | null> {
