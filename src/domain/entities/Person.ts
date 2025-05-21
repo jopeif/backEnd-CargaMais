@@ -9,6 +9,7 @@ export type personProps = {
 }
 
 export class Person {
+    
     constructor(private readonly props: personProps) {}
 
     public static build(name: string, cpf: string, birthDay: Date, phoneNumber: string, userId: string){
@@ -31,6 +32,9 @@ export class Person {
         return new Person(props)
     }
 
+    getProps() {
+        return this.props
+    }
     
 }
 

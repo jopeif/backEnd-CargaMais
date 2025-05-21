@@ -3,7 +3,8 @@ import { User } from "../../../../domain/entities/User";
 import { UserRepository } from "../../../../domain/repositories/UserRepository";
 import { RowDataPacket } from "mysql2";
 
-export class UserRepositoryMysql implements UserRepository {
+//implements UserRepository
+export class UserRepositoryMysql  {
 
     async save(user: User): Promise<void> {
         const props = user.getProps();

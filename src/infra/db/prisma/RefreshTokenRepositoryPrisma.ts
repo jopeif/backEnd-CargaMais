@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import { PrismaClient } from "@prisma/client";
+import { RefreshTokenRepository } from "../../../domain/repositories/RefreshTokenRepository";
 
 export const prisma = new PrismaClient();
 
-export class RefreshTokenRepositoryPrisma {
+export class RefreshTokenRepositoryPrisma implements RefreshTokenRepository{
     async save(userId: string, token: string, expiresAt: Date): Promise<void> {
         const id = uuidv4();
         await prisma.refreshToken.create({
@@ -20,6 +21,12 @@ export class RefreshTokenRepositoryPrisma {
         return await prisma.refreshToken.findUnique({
             where: { token }
         });
+    }
+
+    async findByUserId(userId: string): Promise<any[] | null> {
+        return await prisma.refreshToken.findMany({
+            where: { userId }
+        })
     }
 
     async deleteByToken(token: string): Promise<void> {

@@ -8,24 +8,65 @@ generator client {
 }
 
 model User {
-  id         String   @id
+  id         String   @id @default(uuid())
   email      String   @unique
   password   String
   role       String
-  createdAt  DateTime
+  createdAt  DateTime @default(now())
   lastLogin  DateTime?
-  isBlocked  Boolean
+  isBlocked  Boolean  @default(false)
+
+  persons    Person[]
+  refreshTokens RefreshToken[]
 }
 
 model RefreshToken {
-  id        String   @id
+  id        String   @id @default(uuid())
   userId    String
   token     String   @db.Text
   expiresAt DateTime
   createdAt DateTime @default(now())
 
+  user      User     @relation(fields: [userId], references: [id])
+
   @@index([userId])
   @@unique([token(length: 191)])
 }
 
+model Person {
+  id          String   @id @default(uuid())
+  name        String
+  cpf         String   @unique
+  birthDay    DateTime
+  phoneNumber String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  Driver Driver[]
+
+  Company Company[]
+}
+
+model Driver {
+  id          String   @id @default(uuid())
+  personId    String   @unique
+  cnh         String
+  cnhCategory String
+  antt        String
+
+  person      Person   @relation(fields: [personId], references: [id])
+}
+
+model Company {
+  id                String   @id @default(uuid())
+  personId          String   @unique
+  razaoSocial       String
+  nomeFantasia      String
+  cnpj              String   @unique
+  commercialPhone   String
+  commercialEmail   String
+  commercialAdress  String
+
+  person            Person   @relation(fields: [personId], references: [id])
+}
 

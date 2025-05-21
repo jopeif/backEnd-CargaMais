@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ContainerFactory } from "../../../../app/ContainerFactory";
+import { ContainerFactory } from "../../../../di/ContainerFactory";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { roleMiddleware } from "../middlewares/roleMiddleware";
 
@@ -12,6 +12,8 @@ router.post("/register", (req, res) => container.authController.registrarUsuario
 router.post("/admin/register", authMiddleware, roleMiddleware(["admin"]), (req, res)=> container.authController.registrarAdmin(req, res))
 
 router.get("/me", authMiddleware, (req, res) => container.authController.getProfile(req, res));
-router.get("/me", authMiddleware, roleMiddleware(["admin"]), (req, res)=> container.authController.getProfile(req, res))
+router.get("/admin/me", authMiddleware, roleMiddleware(["admin"]), (req, res)=> container.authController.getProfile(req, res))
+
+
 
 export default router;

@@ -58,9 +58,25 @@ export class UserRepositoryPrisma implements UserRepository {
     }
 
     async updateLastLogin(id: string, date: Date): Promise<void> {
-        await prisma.user.update({
-            where: { id },
-            data: { lastLogin: date }
+        try{
+            await prisma.user.update({
+                where: { id },
+                data: { lastLogin: date }
         });
+        }catch(error){
+            throw error
+        }
+        
+    }
+
+    async delete(id: string): Promise<boolean> {
+        try {
+            await prisma.user.delete({
+                where: { id }
+            });
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 }

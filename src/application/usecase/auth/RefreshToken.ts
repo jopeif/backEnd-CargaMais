@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
-import { RefreshTokenRepositoryMysql } from "../../../infra/db/mySql/repositories/RefreshTokenRepository";
 import { RefreshTokenInputDTO } from "../../dto/auth/refreshToken/RefreshTokenInputDTO";
 import { RefreshTokenOutputDTO } from "../../dto/auth/refreshToken/RefreshTokenOutputDTO";
 import { UseCase } from "../UseCase";
 import { config } from "../../../infra/config/config";
+import { RefreshTokenRepositoryPrisma } from "../../../infra/db/prisma/RefreshTokenRepositoryPrisma";
 
 export class RefreshToken implements UseCase<RefreshTokenInputDTO, RefreshTokenOutputDTO> {
-    constructor(private refreshTokenRepo: RefreshTokenRepositoryMysql) {}
+    constructor(private refreshTokenRepo: RefreshTokenRepositoryPrisma) {}
 
     public async execute(input: RefreshTokenInputDTO): Promise<RefreshTokenOutputDTO> {
         const oldToken = input.refreshToken;
